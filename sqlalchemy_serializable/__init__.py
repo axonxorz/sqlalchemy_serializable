@@ -44,10 +44,10 @@ class SerializableModel(object):
             # Full override
             json_args = mapping_extend({}, self._base_json_args(), options)
         obj = {}
-        for column in self.__table__.columns:
-            if '*' not in json_args['exclude_attrs'] and column.name not in json_args['exclude_attrs'] or \
-                (column.name in json_args['include_attrs']):
-                    obj[column.name] = getattr(self, column.name)
+        for column_attr in self.__mapper__.columns.keys():
+            if '*' not in json_args['exclude_attrs'] and column_attr not in json_args['exclude_attrs'] or \
+                (column_attr in json_args['include_attrs']):
+                    obj[column_attr] = getattr(self, column_attr)
 
         for relationship_name in [name for (name, include) in json_args['relationships'].items() if include is True]:
             try:
